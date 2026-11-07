@@ -455,6 +455,13 @@
       if (e.key === 'Escape') {
         closeLightbox();
       }
+      if (modal.classList.contains('active') && projectGallery.length > 1 && (e.key === 'ArrowRight' || e.key === 'ArrowLeft')) {
+        projectGalleryIndex = e.key === 'ArrowRight'
+          ? (projectGalleryIndex - 1 + projectGallery.length) % projectGallery.length
+          : (projectGalleryIndex + 1) % projectGallery.length;
+        const item = projectGallery[projectGalleryIndex];
+        if (item) openLightbox(item[0], item[1]);
+      }
     });
   }
 
