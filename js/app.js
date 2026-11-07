@@ -231,6 +231,16 @@
     }
   }
 
+  function renderSharedChrome() {
+    if (!document.getElementById('main-content')) return;
+    const header = document.querySelector('.site-header');
+    const footer = document.querySelector('.site-footer');
+    const headerMarkup = `<header class="site-header"><div class="container header-inner"><a href="index.html" class="brand-logo" aria-label="إيملي نوتس — الرئيسية"><img src="assets/img/emle-logo.webp" alt="إيملي نوتس" width="140" height="63"></a><nav class="main-nav" aria-label="التنقل الرئيسي"><a href="index.html" class="nav-link">الرئيسية</a><a href="platform.html" class="nav-link">المنصة التعليمية</a><a href="governance.html" class="nav-link">منظومة الحوكمة التعليمية</a><a href="learning-paths.html" class="nav-link">المسارات التعليمية</a><div class="nav-dropdown"><button type="button" class="nav-link nav-dropdown-toggle" aria-expanded="false" aria-haspopup="true">تحت التطوير <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button><div class="nav-dropdown-menu" role="menu"></div></div><a href="projects.html" class="nav-link">سابقة الأعمال</a><a href="about.html" class="nav-link">من نحن</a></nav><div class="header-actions"><a href="index.html#contact" class="btn btn--navy btn--sm">تواصل معنا</a></div><button type="button" id="mobile-menu-toggle" class="mobile-menu-btn" aria-label="فتح القائمة" aria-expanded="false" aria-controls="mobile-drawer"><svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button></div><div id="mobile-drawer" class="mobile-drawer" aria-label="قائمة الجوال"><a href="index.html" class="mobile-nav-link">الرئيسية</a><div class="mobile-sublinks"></div><a href="about.html" class="mobile-nav-link">من نحن</a><div style="margin-top:1rem"><a href="index.html#contact" class="btn btn--primary">تواصل معنا</a></div></div></header>`;
+    const footerMarkup = `<footer class="site-footer" id="site-footer"><div class="container"><div class="footer-grid"><div><a href="index.html" class="footer-brand-logo"><img src="assets/img/emle-logo.webp" alt="إيملي نوتس" width="112" height="40"></a><p class="footer-brand-text">حلول رقمية للتعليم الطبي والحوكمة الأكاديمية، مبنية لتناسب واقع المؤسسات التعليمية.</p></div><div><h2 class="footer-heading">استكشف</h2><div class="footer-links"><a href="platform.html">المنصة التعليمية</a><a href="governance.html">الحوكمة التعليمية</a><a href="learning-paths.html">المسارات التعليمية</a></div></div><div><h2 class="footer-heading">الشركة</h2><div class="footer-links"><a href="projects.html">سابقة الأعمال</a><a href="about.html">من نحن</a><a href="index.html#contact">تواصل معنا</a></div></div><div><h2 class="footer-heading">قانوني</h2><div class="footer-links"><a href="privacy.html">سياسة الخصوصية</a><a href="terms.html">الشروط والأحكام</a><a href="mailto:info@emlenotes.com">info@emlenotes.com</a></div></div></div><div class="footer-bottom"><span>© 2026 جميع الحقوق محفوظة لإيملي نوتس.</span><span>مصر والعالم العربي</span></div></div></footer>`;
+    if (header) header.outerHTML = headerMarkup;
+    if (footer) footer.outerHTML = footerMarkup;
+  }
+
   function initNavigation() {
     refineNavigation();
     const header = document.querySelector('.site-header');
@@ -534,6 +544,7 @@
   window.closeLightbox = closeLightbox;
 
   document.addEventListener('DOMContentLoaded', () => {
+    renderSharedChrome();
     initNavigation();
     rewriteLegacyLinks();
     initSolutionDetailPage();

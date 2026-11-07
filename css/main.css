@@ -441,7 +441,7 @@ ul, ol {
 }
 
 .brand-logo img {
-  height: 44px;
+  height: 40px;
   width: auto;
   object-fit: contain;
 }
@@ -1658,7 +1658,7 @@ textarea.form-control {
 }
 
 .footer-brand-logo img {
-  height: 32px;
+  height: 28px;
   width: auto;
 }
 
@@ -1693,6 +1693,28 @@ textarea.form-control {
   justify-content: space-between;
   font-size: 0.875rem;
   color: var(--slate-400);
+}
+
+/* Shared chrome and balanced media */
+.feature-media img {
+  width: 100%;
+  max-height: 430px;
+  object-fit: cover;
+}
+
+.case-card img:not(.case-card-logo) {
+  max-height: 210px;
+  object-fit: cover;
+}
+
+@media (max-width: 1199px) {
+  .main-nav, .header-actions { display: none; }
+  .mobile-menu-btn { display: inline-flex; }
+}
+
+@media (min-width: 1200px) {
+  .main-nav { display: flex; }
+  .mobile-menu-btn { display: none; }
 }
 
 @media (min-width: 768px) {
