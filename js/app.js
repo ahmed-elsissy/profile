@@ -18,7 +18,63 @@
   /* --------------------------------------------------------------------------
    * 1. Header Scroll & Mobile Menu
    * -------------------------------------------------------------------------- */
+  function refineNavigation() {
+    const mainNav = document.querySelector('.main-nav');
+    const mobileDrawer = document.getElementById('mobile-drawer');
+    const headerActions = document.querySelector('.header-actions');
+
+    // Keep the main navigation focused on a B2B visitor's decision path:
+    // company → solutions → proof → future vision → contact CTA.
+    if (mainNav) {
+      mainNav.querySelectorAll(':scope > a.nav-link').forEach((link) => {
+        if (link.getAttribute('href') === 'index.html' ||
+            link.getAttribute('href') === 'attendance.html' ||
+            link.getAttribute('href') === 'contact.html') {
+          link.remove();
+        }
+      });
+
+      const projectsLink = mainNav.querySelector(':scope > a[href="projects.html"]');
+      if (projectsLink) projectsLink.textContent = 'مشروعاتنا وأثرنا';
+
+      const roadmapLink = mainNav.querySelector(':scope > a[href="roadmap.html"]');
+      if (roadmapLink) roadmapLink.textContent = 'رؤيتنا القادمة';
+
+      const solutionsToggle = mainNav.querySelector('.nav-dropdown-toggle');
+      if (solutionsToggle) {
+        const labelNode = Array.from(solutionsToggle.childNodes)
+          .find((node) => node.nodeType === Node.TEXT_NODE);
+        if (labelNode) labelNode.nodeValue = 'حلولنا ';
+      }
+    }
+
+    if (headerActions) {
+      const redundantProjectsButton = headerActions.querySelector('a[href="projects.html"]');
+      if (redundantProjectsButton) redundantProjectsButton.remove();
+    }
+
+    if (mobileDrawer) {
+      mobileDrawer.querySelectorAll('.mobile-nav-link').forEach((link) => {
+        if (link.getAttribute('href') === 'index.html' ||
+            link.getAttribute('href') === 'attendance.html' ||
+            link.getAttribute('href') === 'contact.html') {
+          link.remove();
+        }
+      });
+
+      const solutionsLink = mobileDrawer.querySelector('.mobile-nav-link[href="solutions.html"]');
+      if (solutionsLink) solutionsLink.textContent = 'حلولنا';
+
+      const projectsLink = mobileDrawer.querySelector('.mobile-nav-link[href="projects.html"]');
+      if (projectsLink) projectsLink.textContent = 'مشروعاتنا وأثرنا';
+
+      const roadmapLink = mobileDrawer.querySelector('.mobile-nav-link[href="roadmap.html"]');
+      if (roadmapLink) roadmapLink.textContent = 'رؤيتنا القادمة';
+    }
+  }
+
   function initNavigation() {
+    refineNavigation();
     const header = document.querySelector('.site-header');
     const mobileBtn = document.getElementById('mobile-menu-toggle');
     const mobileDrawer = document.getElementById('mobile-drawer');
