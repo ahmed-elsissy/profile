@@ -14,6 +14,8 @@
 
   const coverflowStates = {};
   let lastFocusedElement = null;
+  let projectGallery = [];
+  let projectGalleryIndex = 0;
 
   /* --------------------------------------------------------------------------
    * 1. Header Scroll & Mobile Menu
@@ -159,6 +161,8 @@
     document.title = `${config.title} | إيملي نوتس`;
     const heroTitle = document.querySelector('.page-hero .hero-title');
     if (heroTitle) heroTitle.textContent = config.title;
+    const legacySolutionIndex = document.querySelector('#main-content > .page-hero + .section--sm');
+    if (legacySolutionIndex) legacySolutionIndex.hidden = true;
     document.querySelectorAll('#hosting, #qbank, #attendance, #production, #cme-governance, #ai').forEach((section) => {
       section.hidden = !config.sections.includes(section.id);
     });
@@ -188,9 +192,43 @@
   }
 
   function initProjectGallery() {
-    document.querySelectorAll('[data-gallery-image]').forEach((item) => {
-      item.addEventListener('click', () => openLightbox(item.dataset.galleryImage, item.dataset.galleryCaption));
+    const groups = {
+      'zagazig-attendance': [['assets/img/attendance-checking.webp', 'تطبيق المحاضر — كلية طب الزقازيق'], ['assets/img/attendance-live.webp', 'المتابعة اللحظية'], ['assets/img/attendance-reports.webp', 'تقارير الحوكمة']],
+      'zagazig-surgery': [['assets/img/content-production.webp', 'إنتاج المحتوى الطبي'], ['assets/img/app-lessons.webp', 'واجهة الدروس'], ['assets/img/app-videos.webp', 'مكتبة الفيديو']],
+      'sharkia-sadat': [['assets/img/hosting-platform.webp', 'منصة البرامج المهنية'], ['assets/img/app-chapters.webp', 'تنظيم المحتوى'], ['assets/img/qbank-main.webp', 'بنوك الأسئلة']],
+      'medical-union': [['assets/img/attendance-reports.webp', 'تقارير التشغيل'], ['assets/img/qbank-analytics.webp', 'تحليلات التعلم'], ['assets/img/hosting-platform.webp', 'المنصة الرقمية']],
+      'connect-academy': [['assets/img/app-lessons.webp', 'واجهة الدروس'], ['assets/img/qbank-custom.webp', 'جلسات التقييم'], ['assets/img/qbank-history.webp', 'سجل المحاولات']]
+    };
+    const render = () => {
+      const item = projectGallery[projectGalleryIndex];
+      if (item) openLightbox(item[0], item[1]);
+    };
+    Object.entries(groups).forEach(([id, images]) => {
+      const card = document.getElementById(id);
+      if (!card || card.querySelector('.project-gallery-strip')) return;
+      const strip = document.createElement('div');
+      strip.className = 'project-gallery-strip';
+      strip.style.cssText = 'display:flex;gap:.5rem;overflow:auto;padding-top:1rem;';
+      images.forEach(([src, alt], index) => {
+        const button = document.createElement('button');
+        button.type = 'button'; button.setAttribute('aria-label', `فتح ${alt}`);
+        button.style.cssText = 'border:0;border-radius:.65rem;padding:0;min-width:78px;height:58px;overflow:hidden;cursor:pointer;background:#e2e8f0;';
+        button.innerHTML = `<img src="${src}" alt="" width="78" height="58" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;">`;
+        button.addEventListener('click', () => { projectGallery = images; projectGalleryIndex = index; render(); });
+        strip.appendChild(button);
+      });
+      card.appendChild(strip);
     });
+    const modal = document.getElementById('lightbox-modal');
+    if (modal && !modal.querySelector('.gallery-arrows')) {
+      const arrows = document.createElement('div');
+      arrows.className = 'gallery-arrows';
+      arrows.style.cssText = 'position:absolute;inset-inline:1rem;top:50%;display:flex;justify-content:space-between;pointer-events:none;';
+      arrows.innerHTML = '<button type="button" aria-label="السابق" data-gallery-prev style="pointer-events:auto;width:46px;height:46px;border:0;border-radius:50%;font-size:28px;cursor:pointer;">‹</button><button type="button" aria-label="التالي" data-gallery-next style="pointer-events:auto;width:46px;height:46px;border:0;border-radius:50%;font-size:28px;cursor:pointer;">›</button>';
+      arrows.querySelector('[data-gallery-prev]').addEventListener('click', () => { if(projectGallery.length){ projectGalleryIndex=(projectGalleryIndex-1+projectGallery.length)%projectGallery.length; render(); }});
+      arrows.querySelector('[data-gallery-next]').addEventListener('click', () => { if(projectGallery.length){ projectGalleryIndex=(projectGalleryIndex+1)%projectGallery.length; render(); }});
+      modal.appendChild(arrows);
+    }
   }
 
   function initNavigation() {
