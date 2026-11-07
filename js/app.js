@@ -27,8 +27,7 @@
     // home → solutions → company, with contact as the sole CTA.
     if (mainNav) {
       mainNav.querySelectorAll(':scope > a.nav-link').forEach((link) => {
-        if (link.getAttribute('href') === 'projects.html' ||
-            link.getAttribute('href') === 'attendance.html' ||
+        if (link.getAttribute('href') === 'attendance.html' ||
             link.getAttribute('href') === 'roadmap.html' ||
             link.getAttribute('href') === 'contact.html') {
           link.remove();
@@ -101,8 +100,7 @@
 
     if (mobileDrawer) {
       mobileDrawer.querySelectorAll('.mobile-nav-link').forEach((link) => {
-        if (link.getAttribute('href') === 'projects.html' ||
-            link.getAttribute('href') === 'attendance.html' ||
+        if (link.getAttribute('href') === 'attendance.html' ||
             link.getAttribute('href') === 'roadmap.html' ||
             link.getAttribute('href') === 'contact.html') {
           link.remove();
@@ -186,6 +184,12 @@
     document.querySelectorAll('a[href]').forEach((link) => {
       const destination = routes[link.getAttribute('href')];
       if (destination) link.setAttribute('href', destination);
+    });
+  }
+
+  function initProjectGallery() {
+    document.querySelectorAll('[data-gallery-image]').forEach((item) => {
+      item.addEventListener('click', () => openLightbox(item.dataset.galleryImage, item.dataset.galleryCaption));
     });
   }
 
@@ -487,6 +491,7 @@
     initNavigation();
     rewriteLegacyLinks();
     initSolutionDetailPage();
+    initProjectGallery();
     initCoverflow('coverflow-hosting');
     initCoverflow('coverflow-qbank');
     initCoverflow('coverflow-attendance');
