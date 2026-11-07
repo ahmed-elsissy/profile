@@ -513,15 +513,16 @@
         const org = formData.get('organization') || '';
         const solution = formData.get('solution') || '';
 
-        if (submitBtn) {
-          submitBtn.disabled = true;
-          submitBtn.textContent = 'تم استلام طلبك بنجاح ✓';
-        }
-
+        const phone = formData.get('phone') || '';
+        const email = formData.get('email') || '';
+        const message = formData.get('message') || '';
+        const subject = `طلب تواصل — ${solution || 'إيملي نوتس'}`;
+        const body = `الاسم: ${name}\nالجهة: ${org}\nالهاتف: ${phone}\nالبريد: ${email}\nالحل المطلوب: ${solution}\n\nتفاصيل الاحتياج:\n${message}`;
         if (feedback) {
-          feedback.textContent = `شكراً لك ${name}${org ? ' (' + org + ')' : ''}! تم تسجيل طلبك بخصوص "${solution || 'حلول إيملي نوتس'}" وسيتواصل معك فريق الشراكات المؤسسية خلال ساعات العمل.`;
+          feedback.textContent = 'سيُفتح بريدك الآن لإرسال الطلب إلى فريق الشراكات. بعد الإرسال ستصلكم متابعة عبر القناة المناسبة.';
           feedback.classList.add('is-visible');
         }
+        window.location.href = `mailto:info@emlenotes.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
       });
     });
   }
