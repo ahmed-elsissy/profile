@@ -171,6 +171,24 @@
     }
   }
 
+  function rewriteLegacyLinks() {
+    const routes = {
+      'solutions.html#hosting': 'platform.html',
+      'solutions.html#qbank': 'learning-paths.html',
+      'solutions.html#production': 'learning-paths.html',
+      'solutions.html#cme-governance': 'governance.html',
+      'solutions.html#ai': 'ai-education.html',
+      'solutions.html': 'index.html#solutions',
+      'attendance.html': 'governance.html',
+      'roadmap.html': 'about.html#roadmap',
+      'contact.html': 'index.html#contact'
+    };
+    document.querySelectorAll('a[href]').forEach((link) => {
+      const destination = routes[link.getAttribute('href')];
+      if (destination) link.setAttribute('href', destination);
+    });
+  }
+
   function initNavigation() {
     refineNavigation();
     const header = document.querySelector('.site-header');
@@ -467,6 +485,7 @@
 
   document.addEventListener('DOMContentLoaded', () => {
     initNavigation();
+    rewriteLegacyLinks();
     initSolutionDetailPage();
     initCoverflow('coverflow-hosting');
     initCoverflow('coverflow-qbank');
