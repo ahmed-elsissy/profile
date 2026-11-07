@@ -23,11 +23,11 @@
     const mobileDrawer = document.getElementById('mobile-drawer');
     const headerActions = document.querySelector('.header-actions');
 
-    // Keep the main navigation focused on a B2B visitor's decision path:
-    // company → solutions → proof → future vision → contact CTA.
+    // Keep the main navigation focused on the essentials:
+    // home → solutions → company, with contact as the sole CTA.
     if (mainNav) {
       mainNav.querySelectorAll(':scope > a.nav-link').forEach((link) => {
-        if (link.getAttribute('href') === 'index.html' ||
+        if (link.getAttribute('href') === 'projects.html' ||
             link.getAttribute('href') === 'attendance.html' ||
             link.getAttribute('href') === 'roadmap.html' ||
             link.getAttribute('href') === 'contact.html') {
@@ -35,14 +35,38 @@
         }
       });
 
-      const projectsLink = mainNav.querySelector(':scope > a[href="projects.html"]');
-      if (projectsLink) projectsLink.textContent = 'مشروعاتنا وأثرنا';
-
       const solutionsToggle = mainNav.querySelector('.nav-dropdown-toggle');
       if (solutionsToggle) {
         const labelNode = Array.from(solutionsToggle.childNodes)
           .find((node) => node.nodeType === Node.TEXT_NODE);
         if (labelNode) labelNode.nodeValue = 'حلولنا ';
+      }
+
+      const aboutLink = mainNav.querySelector(':scope > a[href="about.html"]');
+      if (aboutLink) mainNav.appendChild(aboutLink);
+
+      const solutionsMenu = mainNav.querySelector('.nav-dropdown-menu');
+      if (solutionsMenu) {
+        const hosting = solutionsMenu.querySelector('a[href="solutions.html#hosting"]');
+        const attendance = solutionsMenu.querySelector('a[href="attendance.html"]');
+        const qbank = solutionsMenu.querySelector('a[href="solutions.html#qbank"]');
+        const production = solutionsMenu.querySelector('a[href="solutions.html#production"]');
+        const cme = solutionsMenu.querySelector('a[href="solutions.html#cme-governance"]');
+        const ai = solutionsMenu.querySelector('a[href="solutions.html#ai"]');
+
+        if (cme) cme.remove();
+        if (attendance) {
+          const title = attendance.querySelector('.dropdown-item-title');
+          if (title && title.firstChild) title.firstChild.nodeValue = 'منظومة الحضور الإلكتروني والحوكمة التعليمية ';
+        }
+        if (qbank) {
+          const title = qbank.querySelector('.dropdown-item-title');
+          if (title && title.firstChild) title.firstChild.nodeValue = 'بنوك الأسئلة الطبية ';
+        }
+
+        [hosting, attendance, qbank, production, ai].filter(Boolean).forEach((item) => {
+          solutionsMenu.appendChild(item);
+        });
       }
     }
 
@@ -58,7 +82,7 @@
 
     if (mobileDrawer) {
       mobileDrawer.querySelectorAll('.mobile-nav-link').forEach((link) => {
-        if (link.getAttribute('href') === 'index.html' ||
+        if (link.getAttribute('href') === 'projects.html' ||
             link.getAttribute('href') === 'attendance.html' ||
             link.getAttribute('href') === 'roadmap.html' ||
             link.getAttribute('href') === 'contact.html') {
@@ -69,8 +93,21 @@
       const solutionsLink = mobileDrawer.querySelector('.mobile-nav-link[href="solutions.html"]');
       if (solutionsLink) solutionsLink.textContent = 'حلولنا';
 
-      const projectsLink = mobileDrawer.querySelector('.mobile-nav-link[href="projects.html"]');
-      if (projectsLink) projectsLink.textContent = 'مشروعاتنا وأثرنا';
+      const aboutLink = mobileDrawer.querySelector('.mobile-nav-link[href="about.html"]');
+      if (aboutLink) mobileDrawer.insertBefore(aboutLink, mobileDrawer.querySelector('[style]'));
+
+      const mobileHosting = mobileDrawer.querySelector('.mobile-sublinks a[href="solutions.html#hosting"]');
+      const mobileAttendance = mobileDrawer.querySelector('.mobile-sublinks a[href="attendance.html"]');
+      const mobileCme = mobileDrawer.querySelector('.mobile-sublinks a[href="solutions.html#cme-governance"]');
+      if (mobileHosting) mobileHosting.textContent = 'منصة الاستضافة التعليمية';
+      if (mobileAttendance) {
+        mobileAttendance.textContent = 'منظومة الحضور الإلكتروني والحوكمة التعليمية';
+        const qbank = document.createElement('a');
+        qbank.href = 'solutions.html#qbank';
+        qbank.textContent = 'بنوك الأسئلة الطبية';
+        mobileAttendance.insertAdjacentElement('afterend', qbank);
+      }
+      if (mobileCme) mobileCme.remove();
 
       const contactButton = mobileDrawer.querySelector('.mobile-menu-cta, .btn[href="contact.html"]');
       if (contactButton) {
