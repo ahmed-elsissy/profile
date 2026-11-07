@@ -47,6 +47,28 @@
 
       const solutionsMenu = mainNav.querySelector('.nav-dropdown-menu');
       if (solutionsMenu) {
+        const directSolutions = [
+          ['platform.html', 'المنصة التعليمية'],
+          ['governance.html', 'منظومة الحوكمة التعليمية'],
+          ['learning-paths.html', 'المسارات التعليمية']
+        ];
+        directSolutions.forEach(([href, label]) => {
+          if (!mainNav.querySelector(`:scope > a[href="${href}"]`)) {
+            const link = document.createElement('a');
+            link.href = href;
+            link.className = 'nav-link';
+            link.textContent = label;
+            mainNav.insertBefore(link, solutionsMenu.parentElement);
+          }
+        });
+        const toggle = solutionsMenu.parentElement.querySelector('.nav-dropdown-toggle');
+        if (toggle) {
+          const labelNode = Array.from(toggle.childNodes).find((node) => node.nodeType === Node.TEXT_NODE);
+          if (labelNode) labelNode.nodeValue = 'تحت التطوير ';
+        }
+        solutionsMenu.innerHTML = `
+          <a href="ai-education.html" class="dropdown-item" role="menuitem"><span class="dropdown-item-title">التعليم الطبي بالذكاء الاصطناعي <span class="status-badge status-badge--dev">قيد التطوير</span></span><span class="dropdown-item-sub">مساعد دراسي ومحتوى تعليمي ذكي</span></a>
+          <a href="virtual-medical.html" class="dropdown-item" role="menuitem"><span class="dropdown-item-title">التعليم الطبي الافتراضي <span class="status-badge status-badge--dev">قيد التطوير</span></span><span class="dropdown-item-sub">محاكاة وتدريب سريري غامر</span></a>`;
         const hosting = solutionsMenu.querySelector('a[href="solutions.html#hosting"]');
         const attendance = solutionsMenu.querySelector('a[href="attendance.html"]');
         const qbank = solutionsMenu.querySelector('a[href="solutions.html#qbank"]');
@@ -64,9 +86,6 @@
           if (title && title.firstChild) title.firstChild.nodeValue = 'بنوك الأسئلة الطبية ';
         }
 
-        [hosting, attendance, qbank, production, ai].filter(Boolean).forEach((item) => {
-          solutionsMenu.appendChild(item);
-        });
       }
     }
 
@@ -91,7 +110,18 @@
       });
 
       const solutionsLink = mobileDrawer.querySelector('.mobile-nav-link[href="solutions.html"]');
-      if (solutionsLink) solutionsLink.textContent = 'حلولنا';
+      if (solutionsLink) solutionsLink.remove();
+
+      const mobileAnchor = mobileDrawer.querySelector('.mobile-sublinks');
+      [['platform.html', 'المنصة التعليمية'], ['governance.html', 'منظومة الحوكمة التعليمية'], ['learning-paths.html', 'المسارات التعليمية'], ['ai-education.html', 'تحت التطوير: الذكاء الاصطناعي'], ['virtual-medical.html', 'تحت التطوير: التعليم الطبي الافتراضي']].forEach(([href, label]) => {
+        if (mobileAnchor && !mobileDrawer.querySelector(`a[href="${href}"]`)) {
+          const link = document.createElement('a');
+          link.href = href;
+          link.className = 'mobile-nav-link';
+          link.textContent = label;
+          mobileDrawer.insertBefore(link, mobileAnchor);
+        }
+      });
 
       const aboutLink = mobileDrawer.querySelector('.mobile-nav-link[href="about.html"]');
       if (aboutLink) mobileDrawer.insertBefore(aboutLink, mobileDrawer.querySelector('[style]'));
@@ -114,6 +144,30 @@
         contactButton.href = 'index.html#contact';
         contactButton.textContent = 'تواصل معنا';
       }
+    }
+  }
+
+  function initSolutionDetailPage() {
+    const page = window.location.pathname.split('/').pop();
+    const configs = {
+      'platform.html': { title: 'المنصة التعليمية', sections: ['hosting'] },
+      'governance.html': { title: 'منظومة الحوكمة التعليمية', sections: ['attendance'] },
+      'learning-paths.html': { title: 'المسارات التعليمية', sections: ['qbank', 'production'] },
+      'ai-education.html': { title: 'التعليم الطبي بالذكاء الاصطناعي', sections: ['ai'] },
+      'virtual-medical.html': { title: 'التعليم الطبي الافتراضي', sections: [] }
+    };
+    const config = configs[page];
+    if (!config) return;
+    document.title = `${config.title} | إيملي نوتس`;
+    const heroTitle = document.querySelector('.page-hero .hero-title');
+    if (heroTitle) heroTitle.textContent = config.title;
+    document.querySelectorAll('#hosting, #qbank, #attendance, #production, #cme-governance, #ai').forEach((section) => {
+      section.hidden = !config.sections.includes(section.id);
+    });
+    if (page === 'virtual-medical.html') {
+      const main = document.getElementById('main-content');
+      if (main) main.insertAdjacentHTML('beforeend', `
+        <section class="section section--navy"><div class="container"><div class="feature-split"><div><span class="status-badge status-badge--dev">قيد التطوير</span><h2 class="section-title">حرم طبي افتراضي للتدريب الآمن</h2><p class="section-desc">نطوّر بيئة تعليمية غامرة تساعد طلاب الطب والأطباء على التدريب على الحالات والإجراءات في مساحة آمنة وتفاعلية.</p><div class="grid-2"><article class="card card--dark"><h3 class="card-title">محاكاة الحالات</h3><p class="card-text">سيناريوهات سريرية تدعم التعلّم واتخاذ القرار.</p></article><article class="card card--dark"><h3 class="card-title">تعاون الفرق الطبية</h3><p class="card-text">مساحات رقمية مشتركة للتدريب والمناقشة.</p></article></div></div><div class="feature-media"><img src="assets/img/vr-campus.webp" alt="رؤية للتعليم الطبي الافتراضي" width="720" height="720" loading="lazy"></div></div></div></section>`);
     }
   }
 
@@ -413,6 +467,7 @@
 
   document.addEventListener('DOMContentLoaded', () => {
     initNavigation();
+    initSolutionDetailPage();
     initCoverflow('coverflow-hosting');
     initCoverflow('coverflow-qbank');
     initCoverflow('coverflow-attendance');
