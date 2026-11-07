@@ -29,6 +29,7 @@
       mainNav.querySelectorAll(':scope > a.nav-link').forEach((link) => {
         if (link.getAttribute('href') === 'index.html' ||
             link.getAttribute('href') === 'attendance.html' ||
+            link.getAttribute('href') === 'roadmap.html' ||
             link.getAttribute('href') === 'contact.html') {
           link.remove();
         }
@@ -36,9 +37,6 @@
 
       const projectsLink = mainNav.querySelector(':scope > a[href="projects.html"]');
       if (projectsLink) projectsLink.textContent = 'مشروعاتنا وأثرنا';
-
-      const roadmapLink = mainNav.querySelector(':scope > a[href="roadmap.html"]');
-      if (roadmapLink) roadmapLink.textContent = 'رؤيتنا القادمة';
 
       const solutionsToggle = mainNav.querySelector('.nav-dropdown-toggle');
       if (solutionsToggle) {
@@ -51,12 +49,18 @@
     if (headerActions) {
       const redundantProjectsButton = headerActions.querySelector('a[href="projects.html"]');
       if (redundantProjectsButton) redundantProjectsButton.remove();
+      const contactButton = headerActions.querySelector('a[href="contact.html"]');
+      if (contactButton) {
+        contactButton.href = 'index.html#contact';
+        contactButton.textContent = 'تواصل معنا';
+      }
     }
 
     if (mobileDrawer) {
       mobileDrawer.querySelectorAll('.mobile-nav-link').forEach((link) => {
         if (link.getAttribute('href') === 'index.html' ||
             link.getAttribute('href') === 'attendance.html' ||
+            link.getAttribute('href') === 'roadmap.html' ||
             link.getAttribute('href') === 'contact.html') {
           link.remove();
         }
@@ -68,8 +72,11 @@
       const projectsLink = mobileDrawer.querySelector('.mobile-nav-link[href="projects.html"]');
       if (projectsLink) projectsLink.textContent = 'مشروعاتنا وأثرنا';
 
-      const roadmapLink = mobileDrawer.querySelector('.mobile-nav-link[href="roadmap.html"]');
-      if (roadmapLink) roadmapLink.textContent = 'رؤيتنا القادمة';
+      const contactButton = mobileDrawer.querySelector('.mobile-menu-cta, .btn[href="contact.html"]');
+      if (contactButton) {
+        contactButton.href = 'index.html#contact';
+        contactButton.textContent = 'تواصل معنا';
+      }
     }
   }
 
